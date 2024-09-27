@@ -24,19 +24,26 @@ abstract class Menu {
         } else true
     }
 
-    protected fun printMenu(type: EntityType, archiveName: String?) {
+    protected fun printMenu(type: EntityType, entityName: String?) {
         val elements: MutableList<out Entity> = when (type) {
             EntityType.ARCHIVE -> {
-                println("Список архивов")
+                println("Список архивов:")
                 println("1. Создать архив")
                 Repo.archives
             }
 
             EntityType.NOTE -> {
-                println("archiveName")
+                println("$entityName:")
                 println("1. Создать заметку")
-                Repo.notes.filter { note: Note -> note.archiveName == archiveName }
+                Repo.notes.filter { note: Note -> note.archiveName == entityName }
                     .toMutableList()
+            }
+
+            EntityType.TEXT -> {
+                println("$entityName:")
+                println(Repo.notes.find { note -> note.name == entityName }?.text)
+                println("0. Выход")
+                return
             }
         }
 
@@ -57,6 +64,10 @@ abstract class Menu {
             when (entityType) {
                 EntityType.ARCHIVE -> println("Введите имя архива или введите \"назад\" для выхода")
                 EntityType.NOTE -> println("Введите имя заметки или введите \"назад\" для выхода")
+                else -> {
+                    println("Некорректный тип Entity")
+                    return
+                }
             }
             entityName = Scanner(System.`in`).nextLine()
             if (inputIsGoBack(entityName)) {
@@ -70,8 +81,27 @@ abstract class Menu {
                     }
 
                     EntityType.NOTE -> {
-                        Repo.notes.add(Note(entityName, archiveName!!))
+                        var noteText: String
+                        println("Введите текст заметки или введите \"назад\" для выхода")
+                        while (true) {
+                            noteText = Scanner(System.`in`).nextLine()
+                            if (validateInputIsNotEmpty(noteText)) {
+                                break
+                            }
+                            if (inputIsGoBack(noteText)) {
+                                break
+                            }
+                        }
+                        if (noteText.isBlank() || noteText == "назад") {
+                            continue
+                        }
+                        Repo.notes.add(Note(entityName, archiveName!!, noteText))
                         break
+                    }
+
+                    else -> {
+                        println("Некорректный тип Entity")
+                        return
                     }
                 }
             }
@@ -86,22 +116,25 @@ abstract class Menu {
 
     }
 
-    fun openNextMenu(input: Int, currentType: EntityType) {
+    fun openNextMenu(input: Int, currentType: EntityType, archiveName: String?) {
         val elements: MutableList<out Entity>?
         when (currentType) {
             EntityType.ARCHIVE -> {
                 elements = Repo.archives
                 if (checkChoosingEntityIsCorrect(input, elements.size)) {
-                    ArchiveMenu.open(elements[input - 2].name)
+                    ArchiveMenu.open(Repo.archives[input - 2].name)
                 }
             }
 
             EntityType.NOTE -> {
-                //elements = Repo.notes.filter { note: Note -> note.archiveName == archiveName }
-                   // .toMutableList()
+                elements = Repo.notes.filter { note: Note -> note.archiveName == archiveName }
+                    .toMutableList()
+                if (checkChoosingEntityIsCorrect(input, elements.size)) {
+                    NoteMenu.open(Repo.notes[input - 2].name)
+                }
             }
 
-
+            else -> println("Некорректный тип Entity")
         }
 
 

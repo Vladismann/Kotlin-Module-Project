@@ -3,5 +3,6 @@ package data
 enum class EntityType {
 
     ARCHIVE,
-    NOTE
+    NOTE,
+    TEXT
 }

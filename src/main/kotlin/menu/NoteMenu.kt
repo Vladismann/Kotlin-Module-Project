@@ -1,20 +1,23 @@
-/*
 package menu
 
-import data.Note
+import data.EntityType
 import java.util.Scanner
 
 object NoteMenu : Menu() {
 
-    fun open(note: Note) {
+    fun open(noteName: String) {
         while (true) {
-            println(note.name)
-            println(note.text)
-            println("0. Выход")
-
+            printMenu(EntityType.TEXT, noteName)
             val input = Scanner(System.`in`).nextLine()
-            validateNumInput(input)
-            if (input.toInt() == 0) break
+            if (validateNumInputIsNotCorrect(input)) {
+                continue
+            }
+            if (input.toInt() == 0) {
+                println("Возврат в архив")
+                break
+            } else {
+                println("Для выхода введите 0")
+            }
         }
     }
-}*/
+}

@@ -24,7 +24,7 @@ object MainMenu : Menu() {
                 }
 
                 else -> {
-                    openNextMenu(input.toInt(), EntityType.ARCHIVE)
+                    openNextMenu(input.toInt(), EntityType.ARCHIVE, null)
                 }
             }
         }

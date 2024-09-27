@@ -7,7 +7,7 @@ object ArchiveMenu : Menu() {
 
     fun open(archiveName: String) {
         while (true) {
-            printMenu(EntityType.NOTE, null)
+            printMenu(EntityType.NOTE, archiveName)
             val input = Scanner(System.`in`).nextLine()
             if (validateNumInputIsNotCorrect(input)) {
                 continue
@@ -24,11 +24,7 @@ object ArchiveMenu : Menu() {
                 }
 
                 else -> {
-                    /*if (input.toInt() - 1 <= archiveRepo.size) {
-                        //ArchiveMenu.open(actualRepo[input.toInt() - 2])
-                    } else {
-                        println("Укажите существующий архив")
-                    }*/
+                    openNextMenu(input.toInt(), EntityType.NOTE, archiveName)
                 }
             }
         }
