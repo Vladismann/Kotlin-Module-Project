@@ -1,3 +1,6 @@
+import menu.MainMenu
+
 fun main(args: Array<String>) {
-    println("Hello World!")
+
+    MainMenu.open()
 }
