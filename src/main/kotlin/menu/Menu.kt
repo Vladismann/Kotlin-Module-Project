@@ -5,7 +5,7 @@ import data.Entity
 import data.EntityType
 import data.Note
 import data.Repo
-import java.util.Scanner
+
 
 abstract class Menu {
 
@@ -49,7 +49,7 @@ abstract class Menu {
 
         var num = 2
         for (element in elements) {
-            println("${num++}. $element")
+            println("${num++}. ${element.name}")
         }
         println("0. Выход")
     }
@@ -69,7 +69,7 @@ abstract class Menu {
                     return
                 }
             }
-            entityName = Scanner(System.`in`).nextLine()
+            entityName = ScannerUtil.scanInput()
             if (inputIsGoBack(entityName)) {
                 break
             }
@@ -84,7 +84,7 @@ abstract class Menu {
                         var noteText: String
                         println("Введите текст заметки или введите \"назад\" для выхода")
                         while (true) {
-                            noteText = Scanner(System.`in`).nextLine()
+                            noteText = ScannerUtil.scanInput()
                             if (validateInputIsNotEmpty(noteText)) {
                                 break
                             }
@@ -137,6 +137,6 @@ abstract class Menu {
             else -> println("Некорректный тип Entity")
         }
 
-
     }
+
 }
